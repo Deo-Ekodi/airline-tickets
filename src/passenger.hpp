@@ -5,35 +5,61 @@
 class passenger
 {
 private:
-    const char* passenger_name;
+    // const char* passenger_name;
     ticket* passenger_ticket;
 
     // ctrl linked list
-    ticket* prev;
-    ticket* next;
+    passenger* prev;
+    passenger* next;
 
     friend class flight;
 public:
     passenger(/* args */)
     {
-        passenger_name = nullptr;
         passenger_ticket = nullptr;
+        prev = next = nullptr;
     }
-    passenger(const char* name)
+    passenger(const char* name, int seat)
     {
-        passenger_name = name;
+        passenger_ticket->seatNumber = seat;
+        passenger_ticket->passengerName = name;
         passenger_ticket->reserved = true;
+        prev = next = nullptr;
     }
-    ~passenger()
+    const int seatNumber() const
     {
-        delete passenger_name;
-        delete passenger_ticket;
-
-        passenger_name = nullptr;
-        passenger_ticket = nullptr;
+        return this->passenger_ticket->seatNumber;
     }
+    const char *pasengerName() const
+    {
+        return this->passenger_ticket->passengerName;
+    }
+    int *cost() const
+    {
+        return this->passenger_ticket->price;
+    }
+    bool isReserved() const
+    {
+        return this->passenger_ticket->reserved;
+    }
+
+    // ~passenger()
+    // {
+    //     delete passenger_ticket;
+    //     passenger_ticket = nullptr;
+    // }
 
     friend bool ticketStatus(passenger*);
     friend int ticketCost(passenger*);
-    friend void del(passenger*);
 };
+
+bool ticketStatus(passenger *pass)
+{
+    return pass->isReserved();
+}
+
+int ticketCost(passenger *pass)
+{
+    // cost() returns int*
+    return *(pass->cost());
+}
